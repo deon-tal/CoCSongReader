@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package za.co.ashleagardens.coc.util;
 
 import java.io.File;
@@ -114,7 +109,7 @@ public enum PptHelper {
      * @param slide the slide from which to determine the verse index.
      * @return a non-null string if there exists a slide tag, otherwise null.
      */
-    private static String getSlideTag(XSLFSlide slide) {
+    protected static String getSlideTag(XSLFSlide slide) {
         XSLFCommonSlideData data = slide.getCommonSlideData();
         List<DrawingParagraph> drawingParagraphs = data.getText();
 
@@ -137,7 +132,7 @@ public enum PptHelper {
      * @param slide the slide from which to determine the verse index.
      * @return a positive integer if the slide represents a verse, otherwise -1.
      */
-    private static int getVerseIndexFromSlide(XSLFSlide slide) {
+    protected static int getVerseIndexFromSlide(XSLFSlide slide) {
         XSLFCommonSlideData data = slide.getCommonSlideData();
         List<DrawingParagraph> drawingParagraphs = data.getText();
 
