@@ -1,23 +1,12 @@
 package za.co.ashleagardens.coc;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import za.co.ashleagardens.coc.panels.SongVerseChooserPanel;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import za.co.ashleagardens.coc.util.PptHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -25,16 +14,9 @@ import za.co.ashleagardens.coc.util.PptHelper;
  */
 public class CocSongReaderApp extends javax.swing.JFrame {
 
-    private static final String VALID_FILE_DESCRIPTION = "PowerPoint Presentations (.pptx)";
-    private static final String VALID_FILE_EXTENSION = "pptx";
-    private static final String SONG_CHOOSER_DEFAULT_DIR = "user.home";
-    private static final String INVALID_FILE_MESSAGE = "Invalid file type selected. Please select a valid file with a \".pptx\" extension.";
-    private static final String NO_FILE_SELECTED = "No file selected";
-
-//    private Map<List<File>, Map<Integer, Boolean>> fileToVerseMap;
-    private File selectedFile;
-    private final Map<Integer, Boolean> verseSelectionMap;
-    private JPanel verseNumContainerParentPanel;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CocSongReaderApp.class);
+    
+    private SongVerseChooserPanel songVerseChooserPanel;
 
     //TODO: add logging
 //     private static final Logger LOGGER;
@@ -44,8 +26,14 @@ public class CocSongReaderApp extends javax.swing.JFrame {
     public CocSongReaderApp() {
         initComponents();
 
-        verseSelectionMap = new HashMap<>();
-        doneBtn.setEnabled(false);
+        this.pack();
+        songVerseChooserPanel = new SongVerseChooserPanel(this.getContentPane().getSize());
+        songVerseChooserPanel.setVisible(true);
+        this.add(songVerseChooserPanel);
+        this.validate();
+        this.repaint();
+        
+        LOGGER.info("Heelo Deon");
     }
 
     /**
@@ -57,19 +45,12 @@ public class CocSongReaderApp extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        stepOneContainerPanel = new javax.swing.JPanel();
-        cocSongReaderOpenFileBtn = new javax.swing.JButton();
-        fileSelectedLabel = new javax.swing.JLabel();
-        selectedFileNameLabel = new javax.swing.JLabel();
-        stepThreeContainerPanel = new javax.swing.JPanel();
-        doneBtn = new javax.swing.JButton();
-        stepTwoContainerPanel = new javax.swing.JPanel();
-        verseContainerPanel = new javax.swing.JPanel();
-        defaultTextLabel = new javax.swing.JLabel();
         cocSongReaderMenu = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFileMenuItem = new javax.swing.JMenuItem();
         closeAppMenuItem = new javax.swing.JMenuItem();
+        editMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
@@ -80,111 +61,6 @@ public class CocSongReaderApp extends javax.swing.JFrame {
         setName("cocSongReaderAppFrame"); // NOI18N
         setPreferredSize(new java.awt.Dimension(400, 350));
         setResizable(false);
-
-        stepOneContainerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("1. Select song")));
-        stepOneContainerPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        stepOneContainerPanel.setMaximumSize(new java.awt.Dimension(360, 66));
-        stepOneContainerPanel.setMinimumSize(new java.awt.Dimension(360, 66));
-        stepOneContainerPanel.setPreferredSize(new java.awt.Dimension(360, 66));
-
-        cocSongReaderOpenFileBtn.setText("Open File");
-        cocSongReaderOpenFileBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cocSongReaderOpenFileBtnMouseClicked(evt);
-            }
-        });
-
-        fileSelectedLabel.setText("File selected:");
-
-        selectedFileNameLabel.setText("No file selected");
-
-        javax.swing.GroupLayout stepOneContainerPanelLayout = new javax.swing.GroupLayout(stepOneContainerPanel);
-        stepOneContainerPanel.setLayout(stepOneContainerPanelLayout);
-        stepOneContainerPanelLayout.setHorizontalGroup(
-            stepOneContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(stepOneContainerPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(stepOneContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(stepOneContainerPanelLayout.createSequentialGroup()
-                        .addComponent(fileSelectedLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selectedFileNameLabel)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, stepOneContainerPanelLayout.createSequentialGroup()
-                        .addComponent(cocSongReaderOpenFileBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
-        );
-        stepOneContainerPanelLayout.setVerticalGroup(
-            stepOneContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(stepOneContainerPanelLayout.createSequentialGroup()
-                .addComponent(cocSongReaderOpenFileBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(stepOneContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fileSelectedLabel)
-                    .addComponent(selectedFileNameLabel)))
-        );
-
-        stepThreeContainerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("3. Complete")));
-
-        doneBtn.setText("Done");
-        doneBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                doneBtnMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout stepThreeContainerPanelLayout = new javax.swing.GroupLayout(stepThreeContainerPanel);
-        stepThreeContainerPanel.setLayout(stepThreeContainerPanelLayout);
-        stepThreeContainerPanelLayout.setHorizontalGroup(
-            stepThreeContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(stepThreeContainerPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(doneBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        stepThreeContainerPanelLayout.setVerticalGroup(
-            stepThreeContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(doneBtn)
-        );
-
-        stepTwoContainerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("2. Selected verses")));
-        stepTwoContainerPanel.setMaximumSize(new java.awt.Dimension(410, 159));
-        stepTwoContainerPanel.setMinimumSize(new java.awt.Dimension(410, 159));
-        stepTwoContainerPanel.setPreferredSize(new java.awt.Dimension(410, 159));
-        stepTwoContainerPanel.setRequestFocusEnabled(false);
-
-        verseContainerPanel.setEnabled(false);
-
-        defaultTextLabel.setText("No file selected");
-
-        javax.swing.GroupLayout verseContainerPanelLayout = new javax.swing.GroupLayout(verseContainerPanel);
-        verseContainerPanel.setLayout(verseContainerPanelLayout);
-        verseContainerPanelLayout.setHorizontalGroup(
-            verseContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(verseContainerPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(defaultTextLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        verseContainerPanelLayout.setVerticalGroup(
-            verseContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(verseContainerPanelLayout.createSequentialGroup()
-                .addComponent(defaultTextLabel)
-                .addGap(0, 111, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout stepTwoContainerPanelLayout = new javax.swing.GroupLayout(stepTwoContainerPanel);
-        stepTwoContainerPanel.setLayout(stepTwoContainerPanelLayout);
-        stepTwoContainerPanelLayout.setHorizontalGroup(
-            stepTwoContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(verseContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        stepTwoContainerPanelLayout.setVerticalGroup(
-            stepTwoContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(stepTwoContainerPanelLayout.createSequentialGroup()
-                .addComponent(verseContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         fileMenu.setText("File");
 
@@ -208,6 +84,19 @@ public class CocSongReaderApp extends javax.swing.JFrame {
 
         cocSongReaderMenu.add(fileMenu);
 
+        editMenu.setText("Edit");
+        editMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                editMenuMousePressed(evt);
+            }
+        });
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Preferences");
+        editMenu.add(jMenuItem1);
+
+        cocSongReaderMenu.add(editMenu);
+
         helpMenu.setText("Help");
 
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
@@ -227,150 +116,32 @@ public class CocSongReaderApp extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(stepTwoContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 360, Short.MAX_VALUE)
-                    .addComponent(stepOneContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(stepThreeContainerPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addGap(0, 380, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(stepOneContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stepTwoContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stepThreeContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 305, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void cocSongReaderOpenFileBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cocSongReaderOpenFileBtnMouseClicked
-        readSong();
-    }//GEN-LAST:event_cocSongReaderOpenFileBtnMouseClicked
-
-    private void doneBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneBtnMouseClicked
-        try {
-            PptHelper.getPresentationWithSelectedVerses(selectedFile, verseSelectionMap);
-            JOptionPane.showMessageDialog(this, "Temp ppt file successfully created!");
-            resetComponents();
-        } catch (Exception ex) {
-            if (ex instanceof IOException) {
-                JOptionPane.showMessageDialog(this, "Something went wrong while working with the file.");
-                //Something went wrong while working with the file
-            } else {
-                //An unknown exception was thrown
-                JOptionPane.showMessageDialog(this, "An unknown exception was thrown.");
-            }
-        }
-    }//GEN-LAST:event_doneBtnMouseClicked
 
     private void aboutMenuItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutMenuItemMousePressed
         JOptionPane.showMessageDialog(this, "In progress");
     }//GEN-LAST:event_aboutMenuItemMousePressed
 
     private void openFileMenuItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openFileMenuItemMousePressed
-        readSong();
+//        readSong();
     }//GEN-LAST:event_openFileMenuItemMousePressed
 
     private void closeAppMenuItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeAppMenuItemMousePressed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_closeAppMenuItemMousePressed
 
-    private void readSong() {
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(VALID_FILE_DESCRIPTION, VALID_FILE_EXTENSION);
+    private void editMenuMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMenuMousePressed
+    }//GEN-LAST:event_editMenuMousePressed
 
-        fileChooser.setFileFilter(filter);
-        fileChooser.setCurrentDirectory(new File(System.getProperty(SONG_CHOOSER_DEFAULT_DIR)));
-
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            selectedFile = fileChooser.getSelectedFile();
-            if (selectedFile != null) {
-                String extension = selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1);
-                if (!VALID_FILE_EXTENSION.equals(extension)) {
-                    JOptionPane.showMessageDialog(this, INVALID_FILE_MESSAGE);
-                } else {
-                    try {
-                        //Process
-                        selectedFileNameLabel.setText(selectedFile.getName());
-                        int numVerses = PptHelper.determineNumVerses(selectedFile);
-
-                        if (numVerses == 0) {
-                            JOptionPane.showMessageDialog(this, "0 Verses found, nothing to do.");
-                            resetComponents();
-                        } else {
-                            displayVerseSelection(numVerses);
-                        }
-                    } catch (Exception ex) {
-                        if (ex instanceof IOException) {
-                            JOptionPane.showMessageDialog(this, "Something went wrong while working with the file.");
-                            //Something went wrong while working with the file
-                        } else {
-                            //An unknown exception was thrown
-                            JOptionPane.showMessageDialog(this, "An unknown exception was thrown.");
-                        }
-                        resetComponents();
-                    }
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, INVALID_FILE_MESSAGE);
-            }
-        }
-    }
-
-    private void displayVerseSelection(int numVerses) {
-        defaultTextLabel.setVisible(false);
-        doneBtn.setEnabled(true);
-
-        verseNumContainerParentPanel = new JPanel();
-        verseNumContainerParentPanel.setLayout(new BoxLayout(verseNumContainerParentPanel, BoxLayout.Y_AXIS));
-        verseNumContainerParentPanel.setSize(150, numVerses * 25);
-
-        for (int i = 1; i <= numVerses; i++) {
-            JPanel verseNumContainerPanel = new JPanel();
-            verseNumContainerPanel.setLayout(new BoxLayout(verseNumContainerPanel, BoxLayout.X_AXIS));
-
-            final int verseNum = i;
-            final JCheckBox checkBox = new JCheckBox("Verse " + i);
-            checkBox.setMaximumSize(new Dimension(150, 18));
-            checkBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-            checkBox.setVisible(true);
-            checkBox.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    verseSelectionMap.put(verseNum, checkBox.isSelected());
-                }
-            });
-            verseNumContainerPanel.add(checkBox);
-
-            verseSelectionMap.put(verseNum, checkBox.isSelected());
-
-            verseNumContainerPanel.setVisible(true);
-            verseNumContainerParentPanel.add(verseNumContainerPanel);
-        }
-
-        verseNumContainerParentPanel.setVisible(true);
-        verseContainerPanel.add(verseNumContainerParentPanel);
-        verseContainerPanel.validate();
-        verseContainerPanel.repaint();
-    }
-
-    private void resetComponents() {
-        verseContainerPanel.remove(verseNumContainerParentPanel);
-        verseNumContainerParentPanel = null;
-        doneBtn.setEnabled(false);
-        defaultTextLabel.setVisible(true);
-        selectedFileNameLabel.setText(NO_FILE_SELECTED);
-    }
-
+    
     /**
      * @param args the command line arguments
      */
@@ -420,17 +191,11 @@ public class CocSongReaderApp extends javax.swing.JFrame {
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem closeAppMenuItem;
     private javax.swing.JMenuBar cocSongReaderMenu;
-    private javax.swing.JButton cocSongReaderOpenFileBtn;
-    private javax.swing.JLabel defaultTextLabel;
-    private javax.swing.JButton doneBtn;
+    private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JLabel fileSelectedLabel;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem openFileMenuItem;
-    private javax.swing.JLabel selectedFileNameLabel;
-    private javax.swing.JPanel stepOneContainerPanel;
-    private javax.swing.JPanel stepThreeContainerPanel;
-    private javax.swing.JPanel stepTwoContainerPanel;
-    private javax.swing.JPanel verseContainerPanel;
     // End of variables declaration//GEN-END:variables
+
 }

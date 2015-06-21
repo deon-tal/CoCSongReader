@@ -18,8 +18,9 @@ import org.junit.Ignore;
  */
 public final class PptHelperTest {
 
-    private File pptFile;
     private final String fileName = "Here I Am To Worship-eSFP.pptx";
+    private final PptUtil pptUtil = PptUtil.INSTANCE;
+    private File pptFile;
 
     @Before
     public void setup() throws URISyntaxException {
@@ -29,7 +30,7 @@ public final class PptHelperTest {
     @Test
     public void shouldDetermineNumVersesInSong() throws Exception {
         //Act
-        int numVerses = PptHelper.determineNumVerses(pptFile);
+        int numVerses = pptUtil.determineNumVerses(pptFile);
 
         //Assert
         assertEquals("The number of verses in song is not equal to 2", 2, numVerses);
@@ -42,10 +43,10 @@ public final class PptHelperTest {
         Map<Integer, Boolean> verseSelectionMap = new HashMap<>();
         verseSelectionMap.put(1, Boolean.TRUE);
         verseSelectionMap.put(2, Boolean.FALSE);
-        
+
         //Act
-        PptHelper.getPresentationWithSelectedVerses(pptFile, verseSelectionMap);
-        
+        pptUtil.getPresentationWithSelectedVerses(pptFile, verseSelectionMap);
+
         //Assert
     }
 
@@ -58,7 +59,7 @@ public final class PptHelperTest {
         XMLSlideShow slideShow = getXmlSlideShowFromFile(pptFile);
 
         //Act
-        String slideTag = PptHelper.getSlideTag(slideShow.getSlides()[0]);
+        String slideTag = pptUtil.getSlideTag(slideShow.getSlides()[0]);
 
         //Assert
         assertEquals("The slide tag does not match 1-1 Here I Am To Worship", "1-1 Here I Am To Worship", slideTag);

@@ -15,11 +15,14 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         
         <version.apache.poi>3.12</version.apache.poi>
+        <version.commons.configuration>1.10</version.commons.configuration>
         <version.jacoco>0.7.5.201505241946</version.jacoco>
         <version.junit>4.11</version.junit>
+        <version.slf4j>1.7.12</version.slf4j>
     </properties>
     
     <dependencies>
+        <!-- Apache POI -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -36,6 +39,26 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
             <version>${version.apache.poi}</version>
+        </dependency>
+        
+        <!-- Logger -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.slf4j}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${version.slf4j}</version>
+        </dependency>
+        
+        <!-- Configuration -->
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>${version.commons.configuration}</version>
         </dependency>
         
         <!-- Test dependencies -->

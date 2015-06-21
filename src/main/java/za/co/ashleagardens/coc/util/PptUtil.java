@@ -18,7 +18,7 @@ import org.apache.poi.xslf.usermodel.XSLFSlide;
  *
  * @author Deon
  */
-public enum PptHelper {
+public enum PptUtil {
 
     INSTANCE;
 
@@ -26,10 +26,10 @@ public enum PptHelper {
     //TODO: add logging
 //    private static final Logger LOGGER;
 
-    private PptHelper() {
+    private PptUtil() {
     }
 
-    public static int determineNumVerses(File pptFile) throws Exception {
+    public int determineNumVerses(File pptFile) throws Exception {
         try (FileInputStream fis = new FileInputStream(pptFile)) {
             XMLSlideShow ppt = new XMLSlideShow(fis);
             XSLFSlide[] slides = ppt.getSlides();
@@ -53,7 +53,7 @@ public enum PptHelper {
         }
     }
 
-    public static void getPresentationWithSelectedVerses(File pptFile, Map<Integer, Boolean> verseSelectionMap) throws Exception {
+    public void getPresentationWithSelectedVerses(File pptFile, Map<Integer, Boolean> verseSelectionMap) throws Exception {
         try (FileInputStream fis = new FileInputStream(pptFile)) {
             XMLSlideShow ppt = new XMLSlideShow(fis);
             XMLSlideShow newPpt = new XMLSlideShow();
@@ -77,7 +77,7 @@ public enum PptHelper {
         }
     }
 
-    private static Map<Integer, List<XSLFSlide>> breakUpSong(XMLSlideShow ppt) {
+    private Map<Integer, List<XSLFSlide>> breakUpSong(XMLSlideShow ppt) {
         Map<Integer, List<XSLFSlide>> verseSectionMap = new HashMap<>();
         XSLFSlide[] slides = ppt.getSlides();
         Pattern pattern = Pattern.compile(VERSE_REGEX);
@@ -109,7 +109,7 @@ public enum PptHelper {
      * @param slide the slide from which to determine the verse index.
      * @return a non-null string if there exists a slide tag, otherwise null.
      */
-    protected static String getSlideTag(XSLFSlide slide) {
+    protected String getSlideTag(XSLFSlide slide) {
         XSLFCommonSlideData data = slide.getCommonSlideData();
         List<DrawingParagraph> drawingParagraphs = data.getText();
 
@@ -132,7 +132,7 @@ public enum PptHelper {
      * @param slide the slide from which to determine the verse index.
      * @return a positive integer if the slide represents a verse, otherwise -1.
      */
-    protected static int getVerseIndexFromSlide(XSLFSlide slide) {
+    protected int getVerseIndexFromSlide(XSLFSlide slide) {
         XSLFCommonSlideData data = slide.getCommonSlideData();
         List<DrawingParagraph> drawingParagraphs = data.getText();
 

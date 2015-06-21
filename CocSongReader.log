@@ -1,0 +1,11 @@
+21-06-2015 15:16:46 DEBUG PropertiesConfiguration:588 - FileName set to /C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/application.properties
+21-06-2015 15:16:46 DEBUG ConfigurationUtils:449 - ConfigurationUtils.locate(): base is null, name is /C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/application.properties
+21-06-2015 15:16:46 DEBUG DefaultFileSystem:281 - Could not locate file /C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/application.properties at null: no protocol: /C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/application.properties
+21-06-2015 15:16:46 DEBUG ConfigurationUtils:471 - Loading configuration from the absolute path /C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/application.properties
+21-06-2015 15:16:46 DEBUG PropertiesConfiguration:626 - Base path set to file:///C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/application.properties
+21-06-2015 15:18:15 DEBUG PropertiesConfiguration:626 - Base path set to file:///C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/
+21-06-2015 15:18:15 DEBUG PropertiesConfiguration:588 - FileName set to application.properties
+21-06-2015 15:18:15 DEBUG PropertiesConfiguration:726 - URL set to file:/C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/application.properties
+21-06-2015 15:34:56 DEBUG PropertiesConfiguration:626 - Base path set to file:///C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/
+21-06-2015 15:34:56 DEBUG PropertiesConfiguration:588 - FileName set to application.properties
+21-06-2015 15:34:56 DEBUG PropertiesConfiguration:726 - URL set to file:/C:/Users/Deon/Documents/NetBeansProjects/CoCSongReader/target/classes/application.properties

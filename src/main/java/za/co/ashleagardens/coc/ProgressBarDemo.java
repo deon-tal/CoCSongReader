@@ -5,7 +5,6 @@
  */
 package za.co.ashleagardens.coc;
 
-import static java.awt.AWTEventMulticaster.add;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Insets;
