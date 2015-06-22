@@ -1,12 +1,17 @@
 package za.co.ashleagardens.coc;
 
+import java.awt.FlowLayout;
 import za.co.ashleagardens.coc.panels.SongVerseChooserPanel;
 import java.awt.event.WindowEvent;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JWindow;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import za.co.ashleagardens.coc.panels.AboutPanel;
+import za.co.ashleagardens.coc.panels.PropertySheetPanel;
 
 /**
  *
@@ -15,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public class CocSongReaderApp extends javax.swing.JFrame {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CocSongReaderApp.class);
-    
+
     private SongVerseChooserPanel songVerseChooserPanel;
 
     //TODO: add logging
@@ -27,13 +32,7 @@ public class CocSongReaderApp extends javax.swing.JFrame {
         initComponents();
 
         this.pack();
-        songVerseChooserPanel = new SongVerseChooserPanel(this.getContentPane().getSize());
-        songVerseChooserPanel.setVisible(true);
-        this.add(songVerseChooserPanel);
-        this.validate();
-        this.repaint();
-        
-        LOGGER.info("Heelo Deon");
+        addSongVerseChooserPanel();
     }
 
     /**
@@ -50,9 +49,10 @@ public class CocSongReaderApp extends javax.swing.JFrame {
         openFileMenuItem = new javax.swing.JMenuItem();
         closeAppMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        preferencesMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
+        tutorialMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ashlea Gardens Song Reader");
@@ -85,15 +85,15 @@ public class CocSongReaderApp extends javax.swing.JFrame {
         cocSongReaderMenu.add(fileMenu);
 
         editMenu.setText("Edit");
-        editMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+
+        preferencesMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        preferencesMenuItem.setText("Preferences");
+        preferencesMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                editMenuMousePressed(evt);
+                preferencesMenuItemMousePressed(evt);
             }
         });
-
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Preferences");
-        editMenu.add(jMenuItem1);
+        editMenu.add(preferencesMenuItem);
 
         cocSongReaderMenu.add(editMenu);
 
@@ -107,6 +107,10 @@ public class CocSongReaderApp extends javax.swing.JFrame {
             }
         });
         helpMenu.add(aboutMenuItem);
+
+        tutorialMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        tutorialMenuItem.setText("Tutorial");
+        helpMenu.add(tutorialMenuItem);
 
         cocSongReaderMenu.add(helpMenu);
 
@@ -127,49 +131,45 @@ public class CocSongReaderApp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void aboutMenuItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutMenuItemMousePressed
-        JOptionPane.showMessageDialog(this, "In progress");
+        JDialog.setDefaultLookAndFeelDecorated(true);
+        JDialog dialog = new JDialog(this, "About", true);
+        dialog.setLayout(new FlowLayout());
+        dialog.add(new AboutPanel());
+        dialog.setSize(this.getContentPane().getSize());
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }//GEN-LAST:event_aboutMenuItemMousePressed
 
     private void openFileMenuItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openFileMenuItemMousePressed
-//        readSong();
+        addSongVerseChooserPanel();
     }//GEN-LAST:event_openFileMenuItemMousePressed
 
     private void closeAppMenuItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeAppMenuItemMousePressed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_closeAppMenuItemMousePressed
 
-    private void editMenuMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMenuMousePressed
-    }//GEN-LAST:event_editMenuMousePressed
+    private void preferencesMenuItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_preferencesMenuItemMousePressed
+        JDialog.setDefaultLookAndFeelDecorated(true);
+        JDialog dialog = new JDialog(this, "Application properties", true);
+        dialog.setLayout(new FlowLayout());
+        dialog.add(new PropertySheetPanel(dialog));
+        dialog.setSize(this.getContentPane().getSize());
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_preferencesMenuItemMousePressed
 
     
+    private void addSongVerseChooserPanel() {
+        songVerseChooserPanel = new SongVerseChooserPanel(this.getContentPane().getSize());
+        songVerseChooserPanel.setVisible(true);
+        this.add(songVerseChooserPanel);
+        this.validate();
+        this.repaint();
+    }
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CocSongReaderApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CocSongReaderApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CocSongReaderApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CocSongReaderApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -194,8 +194,8 @@ public class CocSongReaderApp extends javax.swing.JFrame {
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem openFileMenuItem;
+    private javax.swing.JMenuItem preferencesMenuItem;
+    private javax.swing.JMenuItem tutorialMenuItem;
     // End of variables declaration//GEN-END:variables
-
 }

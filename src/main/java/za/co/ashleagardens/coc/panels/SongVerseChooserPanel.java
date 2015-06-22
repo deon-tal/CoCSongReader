@@ -4,9 +4,13 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -29,9 +33,10 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
     private static final String NO_FILE_SELECTED = "No file selected";
 
     private static final PptUtil pptUtil = PptUtil.INSTANCE;
-    
+
 //    private Map<List<File>, Map<Integer, Boolean>> fileToVerseMap;
     private final Map<Integer, Boolean> verseSelectionMap;
+    private final List<JCheckBox> checkBoxes;
     private File selectedFile;
     private JPanel verseNumContainerParentPanel;
 
@@ -45,7 +50,8 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
 
         setSize(frameSize);
         verseSelectionMap = new HashMap<>();
-        doneBtn.setEnabled(false);
+        checkBoxes = new ArrayList<>();
+        setButtonsEnabled(false);
     }
 
     /**
@@ -66,6 +72,8 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         stepTwoContainerPanel = new javax.swing.JPanel();
         verseContainerPanel = new javax.swing.JPanel();
         defaultTextLabel = new javax.swing.JLabel();
+        selectAllBtn = new javax.swing.JButton();
+        clearSelectionBtn = new javax.swing.JButton();
 
         stepOneContainerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("1. Select song")));
         stepOneContainerPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -153,20 +161,43 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
             verseContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(verseContainerPanelLayout.createSequentialGroup()
                 .addComponent(defaultTextLabel)
-                .addGap(0, 111, Short.MAX_VALUE))
+                .addGap(0, 86, Short.MAX_VALUE))
         );
+
+        selectAllBtn.setText("Select All");
+        selectAllBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                selectAllBtnMousePressed(evt);
+            }
+        });
+
+        clearSelectionBtn.setText("Clear Selection");
+        clearSelectionBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                clearSelectionBtnMousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout stepTwoContainerPanelLayout = new javax.swing.GroupLayout(stepTwoContainerPanel);
         stepTwoContainerPanel.setLayout(stepTwoContainerPanelLayout);
         stepTwoContainerPanelLayout.setHorizontalGroup(
             stepTwoContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(verseContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(stepTwoContainerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(selectAllBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(clearSelectionBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         stepTwoContainerPanelLayout.setVerticalGroup(
             stepTwoContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(stepTwoContainerPanelLayout.createSequentialGroup()
-                .addComponent(verseContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(verseContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(stepTwoContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(selectAllBtn)
+                    .addComponent(clearSelectionBtn)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -214,6 +245,14 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_doneBtnMouseClicked
 
+    private void selectAllBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectAllBtnMousePressed
+        updateCheckBoxes(true);
+    }//GEN-LAST:event_selectAllBtnMousePressed
+
+    private void clearSelectionBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clearSelectionBtnMousePressed
+        updateCheckBoxes(false);
+    }//GEN-LAST:event_clearSelectionBtnMousePressed
+
     private void readSong() {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(VALID_FILE_DESCRIPTION, VALID_FILE_EXTENSION);
@@ -259,7 +298,7 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
 
     private void displayVerseSelection(int numVerses) {
         defaultTextLabel.setVisible(false);
-        doneBtn.setEnabled(true);
+        setButtonsEnabled(true);
 
         verseNumContainerParentPanel = new JPanel();
         verseNumContainerParentPanel.setLayout(new BoxLayout(verseNumContainerParentPanel, BoxLayout.Y_AXIS));
@@ -281,7 +320,15 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
                     verseSelectionMap.put(verseNum, checkBox.isSelected());
                 }
             });
+            checkBox.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    verseSelectionMap.put(verseNum, checkBox.isSelected());
+                }
+            });
             verseNumContainerPanel.add(checkBox);
+            checkBoxes.add(checkBox);
 
             verseSelectionMap.put(verseNum, checkBox.isSelected());
 
@@ -301,16 +348,30 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         verseNumContainerParentPanel = null;
         verseContainerPanel.validate();
         verseContainerPanel.repaint();
-        doneBtn.setEnabled(false);
+        setButtonsEnabled(false);
         defaultTextLabel.setVisible(true);
         selectedFileNameLabel.setText(NO_FILE_SELECTED);
     }
+    
+    private void setButtonsEnabled(boolean enabled) {
+        selectAllBtn.setEnabled(enabled);
+        clearSelectionBtn.setEnabled(enabled);
+        doneBtn.setEnabled(enabled);
+    }
+    
+    private void updateCheckBoxes(boolean selected) {
+        for(JCheckBox checkBox : checkBoxes) {
+            checkBox.setSelected(selected);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton clearSelectionBtn;
     private javax.swing.JButton cocSongReaderOpenFileBtn;
     private javax.swing.JLabel defaultTextLabel;
     private javax.swing.JButton doneBtn;
     private javax.swing.JLabel fileSelectedLabel;
+    private javax.swing.JButton selectAllBtn;
     private javax.swing.JLabel selectedFileNameLabel;
     private javax.swing.JPanel stepOneContainerPanel;
     private javax.swing.JPanel stepThreeContainerPanel;

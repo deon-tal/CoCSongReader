@@ -39,19 +39,19 @@ public enum PropertyUtil {
             String key = (String) keys.next();
             propertyMap.put(key, config.getString(key));
         }
-        
+
         return propertyMap;
     }
 
-    public void updatePropertyForApplication(Map<String, String> propertyMap) throws IOException, ConfigurationException {
+    public void updatePropertyForApplication(Map<String, String> propertyMap) throws ConfigurationException {
         updatePropertyForFile(APP_PROPERTY_FILE_NAME, propertyMap);
     }
 
-    public void updatePropertyForLogger(Map<String, String> propertyMap) throws IOException, ConfigurationException {
+    public void updatePropertyForLogger(Map<String, String> propertyMap) throws ConfigurationException {
         updatePropertyForFile(LOG_PROPERTY_FILE_NAME, propertyMap);
     }
 
-    private void updatePropertyForFile(String fileName, Map<String, String> propertyMap) throws IOException, ConfigurationException {
+    private void updatePropertyForFile(String fileName, Map<String, String> propertyMap) throws ConfigurationException {
         PropertiesConfiguration config = new PropertiesConfiguration(PropertyUtil.class.getClassLoader().getResource(fileName));
 
         for (Map.Entry<String, String> entry : propertyMap.entrySet()) {

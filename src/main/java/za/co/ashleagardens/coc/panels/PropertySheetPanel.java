@@ -1,5 +1,11 @@
 package za.co.ashleagardens.coc.panels;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import za.co.ashleagardens.coc.components.PropertyTable;
 import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
@@ -15,11 +21,18 @@ public class PropertySheetPanel extends javax.swing.JPanel {
     private static final PropertyUtil propertyUtil = PropertyUtil.INSTANCE;
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertySheetPanel.class);
 
+    private final JDialog propertySheetPanelParent;
+
     /**
      * Creates new form PropertySheetPanel
+     * @param propertySheetPanelParent the parent dialog this property sheet gets added to.
      */
-    public PropertySheetPanel() {
+    public PropertySheetPanel(JDialog propertySheetPanelParent) {
         initComponents();
+
+        this.propertySheetPanelParent = propertySheetPanelParent;
+        this.propertyTableScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        this.setVisible(true);
     }
 
     /**
@@ -34,6 +47,9 @@ public class PropertySheetPanel extends javax.swing.JPanel {
         propertyTableScrollPane = new javax.swing.JScrollPane();
         try {
             propertyTable = new PropertyTable(propertyUtil.getApplicationProperties());
+            okayBtn = new javax.swing.JButton();
+            cancelBtn = new javax.swing.JButton();
+            tableButtonSeparator = new javax.swing.JSeparator();
 
         } catch (ConfigurationException ex) {
             LOGGER.error(ex.getMessage());
@@ -41,24 +57,71 @@ public class PropertySheetPanel extends javax.swing.JPanel {
         propertyTable.getTableHeader().setReorderingAllowed(false);
         propertyTableScrollPane.setViewportView(propertyTable);
 
+        okayBtn.setText("Okay");
+        okayBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                okayBtnMousePressed(evt);
+            }
+        });
+
+        cancelBtn.setText("Cancel");
+        cancelBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cancelBtnMousePressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(propertyTableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(cancelBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(okayBtn))
+                    .addComponent(tableButtonSeparator))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(propertyTableScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 25, Short.MAX_VALUE))
+                .addComponent(propertyTableScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tableButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(okayBtn)
+                    .addComponent(cancelBtn))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cancelBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMousePressed
+        this.propertySheetPanelParent.dispose();
+    }//GEN-LAST:event_cancelBtnMousePressed
+
+    private void okayBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okayBtnMousePressed
+        try {
+            propertyUtil.updatePropertyForApplication(((PropertyTable) propertyTable).getUpdatedPropertyMap());
+        } catch (ConfigurationException ex) {
+            LOGGER.error(ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Could not update properties!");
+        }
+        propertySheetPanelParent.dispose();
+    }//GEN-LAST:event_okayBtnMousePressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cancelBtn;
+    private javax.swing.JButton okayBtn;
     private javax.swing.JTable propertyTable;
     private javax.swing.JScrollPane propertyTableScrollPane;
+    private javax.swing.JSeparator tableButtonSeparator;
     // End of variables declaration//GEN-END:variables
 
 }
