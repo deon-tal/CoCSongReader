@@ -49,7 +49,6 @@ public class PropertySheetPanel extends javax.swing.JPanel {
             propertyTable = new PropertyTable(propertyUtil.getApplicationProperties());
             okayBtn = new javax.swing.JButton();
             cancelBtn = new javax.swing.JButton();
-            tableButtonSeparator = new javax.swing.JSeparator();
 
         } catch (ConfigurationException ex) {
             LOGGER.error(ex.getMessage());
@@ -76,27 +75,21 @@ public class PropertySheetPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(propertyTableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(cancelBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(okayBtn))
-                    .addComponent(tableButtonSeparator))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cancelBtn)
+                .addGap(5, 5, 5)
+                .addComponent(okayBtn)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(propertyTableScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(propertyTableScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(okayBtn)
-                    .addComponent(cancelBtn))
+                    .addComponent(cancelBtn)
+                    .addComponent(okayBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -121,7 +114,6 @@ public class PropertySheetPanel extends javax.swing.JPanel {
     private javax.swing.JButton okayBtn;
     private javax.swing.JTable propertyTable;
     private javax.swing.JScrollPane propertyTableScrollPane;
-    private javax.swing.JSeparator tableButtonSeparator;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -182,6 +182,8 @@
               <Component id="verseContainerPanel" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="selectLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="selectAllBtn" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="clearSelectionBtn" min="-2" max="-2" attributes="0"/>
@@ -197,6 +199,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="selectAllBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="clearSelectionBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="selectLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -237,7 +240,7 @@
         </Container>
         <Component class="javax.swing.JButton" name="selectAllBtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Select All"/>
+            <Property name="text" type="java.lang.String" value="All"/>
           </Properties>
           <Events>
             <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="selectAllBtnMousePressed"/>
@@ -245,11 +248,16 @@
         </Component>
         <Component class="javax.swing.JButton" name="clearSelectionBtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Clear Selection"/>
+            <Property name="text" type="java.lang.String" value="None"/>
           </Properties>
           <Events>
             <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="clearSelectionBtnMousePressed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="selectLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Select:"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

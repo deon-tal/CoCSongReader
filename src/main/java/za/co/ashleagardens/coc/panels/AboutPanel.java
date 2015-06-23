@@ -5,7 +5,12 @@
  */
 package za.co.ashleagardens.coc.panels;
 
-import java.awt.Dimension;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.configuration.ConfigurationException;
+import org.slf4j.LoggerFactory;
+import za.co.ashleagardens.coc.util.PropertyUtil;
 
 /**
  *
@@ -13,12 +18,33 @@ import java.awt.Dimension;
  */
 public class AboutPanel extends javax.swing.JPanel {
 
+    private static final PropertyUtil propertyUtil = PropertyUtil.INSTANCE;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AboutPanel.class);
+    private static String APP_BUILD_VERSION = "Version: ";
+    private static String APP_BUILD_VERSION_DATE = "Version Date: ";
+
+    private static final String VERSION_KEY = "version";
+
     /**
      * Creates new form AboutPanel
      */
     public AboutPanel() {
         initComponents();
 
+        try {
+            for (Map.Entry<String, String> entry : propertyUtil.getApplicationBuildProperties().entrySet()) {
+                if (VERSION_KEY.equals(entry.getKey())) {
+                    APP_BUILD_VERSION += entry.getValue();
+                } else {
+                    APP_BUILD_VERSION_DATE += entry.getValue();
+                }
+            }
+        } catch (ConfigurationException ex) {
+            LOGGER.error(ex.getMessage());
+        }
+
+        appVersionLabel.setText(APP_BUILD_VERSION);
+        appVersionDateLabel.setText(APP_BUILD_VERSION_DATE);
         this.setVisible(true);
     }
 
@@ -31,16 +57,67 @@ public class AboutPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        aboutScrollPane = new javax.swing.JScrollPane();
-        aboutTextArea = new javax.swing.JTextArea();
+        bannerContainerPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cocSongReaderLabel = new javax.swing.JLabel();
+        authorLabel = new javax.swing.JLabel();
+        programVersionLabel = new javax.swing.JLabel();
+        appBuildDetailsContainerPanel = new javax.swing.JPanel();
+        appVersionLabel = new javax.swing.JLabel();
+        appVersionDateLabel = new javax.swing.JLabel();
 
-        aboutTextArea.setEditable(false);
-        aboutTextArea.setBackground(new java.awt.Color(247, 247, 247));
-        aboutTextArea.setColumns(20);
-        aboutTextArea.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        aboutTextArea.setRows(5);
-        aboutTextArea.setText("CoC Song Reader\n===============\n\nThe CoC Song Reader is a simple Java\nSwing application. \n\nIt can read a Powerpoint Presentation and \ndetermine the number of verses in the \npresentation. It then displays the verses for \nselection. It uses the selected verses to\ncreate a new Powerpoint Presentation.\n");
-        aboutScrollPane.setViewportView(aboutTextArea);
+        bannerContainerPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel1.setText("Pic to go here");
+
+        javax.swing.GroupLayout bannerContainerPanelLayout = new javax.swing.GroupLayout(bannerContainerPanel);
+        bannerContainerPanel.setLayout(bannerContainerPanelLayout);
+        bannerContainerPanelLayout.setHorizontalGroup(
+            bannerContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bannerContainerPanelLayout.createSequentialGroup()
+                .addGap(78, 78, 78)
+                .addComponent(jLabel1)
+                .addContainerGap(82, Short.MAX_VALUE))
+        );
+        bannerContainerPanelLayout.setVerticalGroup(
+            bannerContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bannerContainerPanelLayout.createSequentialGroup()
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(32, 32, 32))
+        );
+
+        cocSongReaderLabel.setText("Church of Christ Song Reader");
+
+        authorLabel.setText("Original Author: Deon Taljaard");
+        authorLabel.setAutoscrolls(true);
+
+        programVersionLabel.setText("App Build Details:");
+
+        appBuildDetailsContainerPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        appVersionLabel.setText("Version:");
+
+        appVersionDateLabel.setText("Version Date:");
+
+        javax.swing.GroupLayout appBuildDetailsContainerPanelLayout = new javax.swing.GroupLayout(appBuildDetailsContainerPanel);
+        appBuildDetailsContainerPanel.setLayout(appBuildDetailsContainerPanelLayout);
+        appBuildDetailsContainerPanelLayout.setHorizontalGroup(
+            appBuildDetailsContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(appBuildDetailsContainerPanelLayout.createSequentialGroup()
+                .addGroup(appBuildDetailsContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(appVersionLabel)
+                    .addComponent(appVersionDateLabel))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        appBuildDetailsContainerPanelLayout.setVerticalGroup(
+            appBuildDetailsContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(appBuildDetailsContainerPanelLayout.createSequentialGroup()
+                .addComponent(appVersionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(appVersionDateLabel)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -48,21 +125,40 @@ public class AboutPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(aboutScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cocSongReaderLabel)
+                    .addComponent(authorLabel)
+                    .addComponent(programVersionLabel)
+                    .addComponent(bannerContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(appBuildDetailsContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(aboutScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .addComponent(bannerContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cocSongReaderLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(authorLabel)
+                .addGap(18, 18, 18)
+                .addComponent(programVersionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(appBuildDetailsContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane aboutScrollPane;
-    private javax.swing.JTextArea aboutTextArea;
+    private javax.swing.JPanel appBuildDetailsContainerPanel;
+    private javax.swing.JLabel appVersionDateLabel;
+    private javax.swing.JLabel appVersionLabel;
+    private javax.swing.JLabel authorLabel;
+    private javax.swing.JPanel bannerContainerPanel;
+    private javax.swing.JLabel cocSongReaderLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel programVersionLabel;
     // End of variables declaration//GEN-END:variables
 }

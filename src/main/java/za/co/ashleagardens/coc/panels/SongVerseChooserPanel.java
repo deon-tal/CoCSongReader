@@ -74,6 +74,7 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         defaultTextLabel = new javax.swing.JLabel();
         selectAllBtn = new javax.swing.JButton();
         clearSelectionBtn = new javax.swing.JButton();
+        selectLabel = new javax.swing.JLabel();
 
         stepOneContainerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("1. Select song")));
         stepOneContainerPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -164,19 +165,21 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
                 .addGap(0, 86, Short.MAX_VALUE))
         );
 
-        selectAllBtn.setText("Select All");
+        selectAllBtn.setText("All");
         selectAllBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 selectAllBtnMousePressed(evt);
             }
         });
 
-        clearSelectionBtn.setText("Clear Selection");
+        clearSelectionBtn.setText("None");
         clearSelectionBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 clearSelectionBtnMousePressed(evt);
             }
         });
+
+        selectLabel.setText("Select:");
 
         javax.swing.GroupLayout stepTwoContainerPanelLayout = new javax.swing.GroupLayout(stepTwoContainerPanel);
         stepTwoContainerPanel.setLayout(stepTwoContainerPanelLayout);
@@ -185,6 +188,8 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
             .addComponent(verseContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(stepTwoContainerPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(selectLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(selectAllBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearSelectionBtn)
@@ -197,7 +202,8 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addGroup(stepTwoContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(selectAllBtn)
-                    .addComponent(clearSelectionBtn)))
+                    .addComponent(clearSelectionBtn)
+                    .addComponent(selectLabel)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -372,6 +378,7 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
     private javax.swing.JButton doneBtn;
     private javax.swing.JLabel fileSelectedLabel;
     private javax.swing.JButton selectAllBtn;
+    private javax.swing.JLabel selectLabel;
     private javax.swing.JLabel selectedFileNameLabel;
     private javax.swing.JPanel stepOneContainerPanel;
     private javax.swing.JPanel stepThreeContainerPanel;

@@ -16,18 +16,23 @@ public enum PropertyUtil {
 
     INSTANCE;
 
-    private static final String APP_PROPERTY_FILE_NAME = "application.properties";
-    private static final String LOG_PROPERTY_FILE_NAME = "log4j.properties";
+    private static final String APP_PROPERTIES_FILE_NAME = "application.properties";
+    private static final String LOG_PROPERTIES_FILE_NAME = "log4j.properties";
+    private static final String APP_BUILD_PROPERTIES_FILE_NAME = "build.properties";
 
     private PropertyUtil() {
     }
 
     public Map<String, String> getApplicationProperties() throws ConfigurationException {
-        return getPropertiesForFile(APP_PROPERTY_FILE_NAME);
+        return getPropertiesForFile(APP_PROPERTIES_FILE_NAME);
     }
 
     public Map<String, String> getLoggerProperties() throws ConfigurationException {
-        return getPropertiesForFile(LOG_PROPERTY_FILE_NAME);
+        return getPropertiesForFile(LOG_PROPERTIES_FILE_NAME);
+    }
+    
+    public Map<String, String> getApplicationBuildProperties() throws ConfigurationException {
+        return getPropertiesForFile(APP_BUILD_PROPERTIES_FILE_NAME);
     }
 
     private Map<String, String> getPropertiesForFile(String fileName) throws ConfigurationException {
@@ -44,11 +49,11 @@ public enum PropertyUtil {
     }
 
     public void updatePropertyForApplication(Map<String, String> propertyMap) throws ConfigurationException {
-        updatePropertyForFile(APP_PROPERTY_FILE_NAME, propertyMap);
+        updatePropertyForFile(APP_PROPERTIES_FILE_NAME, propertyMap);
     }
 
     public void updatePropertyForLogger(Map<String, String> propertyMap) throws ConfigurationException {
-        updatePropertyForFile(LOG_PROPERTY_FILE_NAME, propertyMap);
+        updatePropertyForFile(LOG_PROPERTIES_FILE_NAME, propertyMap);
     }
 
     private void updatePropertyForFile(String fileName, Map<String, String> propertyMap) throws ConfigurationException {

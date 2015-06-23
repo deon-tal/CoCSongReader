@@ -1,11 +1,10 @@
 package za.co.ashleagardens.coc;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import za.co.ashleagardens.coc.panels.SongVerseChooserPanel;
 import java.awt.event.WindowEvent;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JWindow;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.slf4j.Logger;
@@ -21,6 +20,8 @@ public class CocSongReaderApp extends javax.swing.JFrame {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CocSongReaderApp.class);
 
+    private static final Dimension ABOUT_DIALOG_DIMENSION = new Dimension(255, 275);
+    
     private SongVerseChooserPanel songVerseChooserPanel;
 
     //TODO: add logging
@@ -135,7 +136,7 @@ public class CocSongReaderApp extends javax.swing.JFrame {
         JDialog dialog = new JDialog(this, "About", true);
         dialog.setLayout(new FlowLayout());
         dialog.add(new AboutPanel());
-        dialog.setSize(this.getContentPane().getSize());
+        dialog.setSize(ABOUT_DIALOG_DIMENSION);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }//GEN-LAST:event_aboutMenuItemMousePressed
