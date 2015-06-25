@@ -1,12 +1,20 @@
 package za.co.ashleagardens.coc.components;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -20,8 +28,12 @@ public class PropertyTable extends JTable {
     public PropertyTable(Map<String, String> propertyMap) {
         this.propertyMap = propertyMap;
         this.tableModel = new PropertyTableModel();
-        
         this.setModel(tableModel);
+        
+        this.addMouseListener(new JTableButtonMouseListener(this));
+        this.getColumn("").setCellRenderer(new JTableButtonRenderer());
+        this.getColumnModel().getColumn(2).setMaxWidth(10);
+        this.getColumnModel().getColumn(2).setMinWidth(10);
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         this.setSize(200, propertyMap.size() * 25);
         this.setVisible(true);
@@ -29,8 +41,8 @@ public class PropertyTable extends JTable {
 
     public Map<String, String> getUpdatedPropertyMap() {
         return tableModel.getDataAsPropertyMap();
-    } 
-    
+    }
+
     private class PropertyTableModel extends AbstractTableModel {
 
         private final String[] columnNames = {"Property Name", "Property Value", ""};
@@ -84,7 +96,15 @@ public class PropertyTable extends JTable {
                 for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
                     data[rowCount][0] = entry.getKey();
                     data[rowCount][1] = entry.getValue();
-                    data[rowCount++][2] = new JButton("...");
+                    JButton buttonTest = new JButton("...");
+                    buttonTest.addActionListener(new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            JOptionPane.showMessageDialog(PropertyTable.this, "Yay");
+                        }
+                    });
+                    data[rowCount++][2] = buttonTest;
                 }
             } else {
                 //TODO: Re-evaluate whether this is necessary
@@ -106,4 +126,41 @@ public class PropertyTable extends JTable {
         }
     }
 
+    private class JTableButtonRenderer implements TableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            JButton button = (JButton) value;
+            if (isSelected) {
+                button.setForeground(table.getSelectionForeground());
+                button.setBackground(table.getSelectionBackground());
+            } else {
+                button.setForeground(table.getForeground());
+                button.setBackground(UIManager.getColor("Button.background"));
+            }
+            return button;
+        }
+    }
+
+    private class JTableButtonMouseListener extends MouseAdapter {
+
+        private final JTable table;
+
+        public JTableButtonMouseListener(JTable table) {
+            this.table = table;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int column = table.getColumnModel().getColumnIndexAtX(e.getX());
+            int row = e.getY() / table.getRowHeight();
+
+            if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
+                Object value = table.getValueAt(row, column);
+                if (value instanceof JButton) {
+                    ((JButton) value).doClick();
+                }
+            }
+        }
+    }
 }

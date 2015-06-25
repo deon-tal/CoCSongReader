@@ -21,7 +21,8 @@ public class CocSongReaderApp extends javax.swing.JFrame {
     private static final Logger LOGGER = LoggerFactory.getLogger(CocSongReaderApp.class);
 
     private static final Dimension ABOUT_DIALOG_DIMENSION = new Dimension(255, 275);
-    
+    private static final Dimension PROPERTIES_DIALOG_DIMENSION = new Dimension(395, 255);
+
     private SongVerseChooserPanel songVerseChooserPanel;
 
     //TODO: add logging
@@ -154,12 +155,11 @@ public class CocSongReaderApp extends javax.swing.JFrame {
         JDialog dialog = new JDialog(this, "Application properties", true);
         dialog.setLayout(new FlowLayout());
         dialog.add(new PropertySheetPanel(dialog));
-        dialog.setSize(this.getContentPane().getSize());
+        dialog.setSize(PROPERTIES_DIALOG_DIMENSION);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }//GEN-LAST:event_preferencesMenuItemMousePressed
 
-    
     private void addSongVerseChooserPanel() {
         songVerseChooserPanel = new SongVerseChooserPanel(this.getContentPane().getSize());
         songVerseChooserPanel.setVisible(true);
@@ -167,6 +167,7 @@ public class CocSongReaderApp extends javax.swing.JFrame {
         this.validate();
         this.repaint();
     }
+
     /**
      * @param args the command line arguments
      */
