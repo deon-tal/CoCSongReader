@@ -7,8 +7,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import za.co.ashleagardens.coc.panels.AboutPanel;
 import za.co.ashleagardens.coc.panels.PropertySheetPanel;
 
@@ -18,15 +16,11 @@ import za.co.ashleagardens.coc.panels.PropertySheetPanel;
  */
 public class CocSongReaderApp extends javax.swing.JFrame {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CocSongReaderApp.class);
-
     private static final Dimension ABOUT_DIALOG_DIMENSION = new Dimension(255, 275);
     private static final Dimension PROPERTIES_DIALOG_DIMENSION = new Dimension(395, 255);
 
     private SongVerseChooserPanel songVerseChooserPanel;
 
-    //TODO: add logging
-//     private static final Logger LOGGER;
     /**
      * Creates new form CocSongReader
      */
@@ -58,11 +52,10 @@ public class CocSongReaderApp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ashlea Gardens Song Reader");
-        setMaximumSize(new java.awt.Dimension(400, 350));
-        setMinimumSize(new java.awt.Dimension(400, 350));
+        setMaximumSize(new java.awt.Dimension(390, 400));
+        setMinimumSize(new java.awt.Dimension(390, 400));
         setName("cocSongReaderAppFrame"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(400, 350));
-        setResizable(false);
+        setPreferredSize(new java.awt.Dimension(390, 400));
 
         fileMenu.setText("File");
 
@@ -174,7 +167,7 @@ public class CocSongReaderApp extends javax.swing.JFrame {
     public static void main(String args[]) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
+
             public void run() {
                 try {
                     //Windows LAF

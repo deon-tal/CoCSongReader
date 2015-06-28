@@ -18,7 +18,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import za.co.ashleagardens.coc.util.PptUtil;
+import za.co.ashleagardens.coc.util.PropertyUtil;
 
 /**
  *
@@ -26,15 +29,19 @@ import za.co.ashleagardens.coc.util.PptUtil;
  */
 public class SongVerseChooserPanel extends javax.swing.JPanel {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SongVerseChooserPanel.class);
+    private static final String CLASS_NAME = SongVerseChooserPanel.class.getName();
+    private static final PptUtil PPT_UTIL = PptUtil.INSTANCE;
+    private static final PropertyUtil PROPERTY_UTIL = PropertyUtil.INSTANCE;
     private static final String VALID_FILE_DESCRIPTION = "PowerPoint Presentations (.pptx)";
     private static final String VALID_FILE_EXTENSION = "pptx";
-    private static final String SONG_CHOOSER_DEFAULT_DIR = "user.home";
     private static final String INVALID_FILE_MESSAGE = "Invalid file type selected. Please select a valid file with a \".pptx\" extension.";
     private static final String NO_FILE_SELECTED = "No file selected";
+    private static final String FILE_EXISTS_MESSAGE = "It seems like the presentation already exists at %s.\nDo you want to continue - the existing file will be overriden?";
+    private static final String FILE_MGT_EXCEPTION_MESSAGE = "Something went wrong while working with the file.";
+    private static final String UNKNOWN_EXCEPTION_MESSAGE = "An unknown exception was thrown.";
+    private static final String SUCCESSFUL_PPT_CREATION_MESSAGE = "PowerPoint presentation with name '%s' successfully created!";
 
-    private static final PptUtil pptUtil = PptUtil.INSTANCE;
-
-//    private Map<List<File>, Map<Integer, Boolean>> fileToVerseMap;
     private final Map<Integer, Boolean> verseSelectionMap;
     private final List<JCheckBox> checkBoxes;
     private File selectedFile;
@@ -69,6 +76,7 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         selectedFileNameLabel = new javax.swing.JLabel();
         stepThreeContainerPanel = new javax.swing.JPanel();
         doneBtn = new javax.swing.JButton();
+        addTimestampCheckBox = new javax.swing.JCheckBox();
         stepTwoContainerPanel = new javax.swing.JPanel();
         verseContainerPanel = new javax.swing.JPanel();
         defaultTextLabel = new javax.swing.JLabel();
@@ -78,8 +86,8 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
 
         stepOneContainerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("1. Select song")));
         stepOneContainerPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        stepOneContainerPanel.setMaximumSize(new java.awt.Dimension(360, 66));
-        stepOneContainerPanel.setMinimumSize(new java.awt.Dimension(360, 66));
+        stepOneContainerPanel.setMaximumSize(new java.awt.Dimension(340, 66));
+        stepOneContainerPanel.setMinimumSize(new java.awt.Dimension(340, 66));
 
         cocSongReaderOpenFileBtn.setText("Open File");
         cocSongReaderOpenFileBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -99,13 +107,12 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
             .addGroup(stepOneContainerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(stepOneContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cocSongReaderOpenFileBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(stepOneContainerPanelLayout.createSequentialGroup()
                         .addComponent(fileSelectedLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selectedFileNameLabel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(cocSongReaderOpenFileBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(selectedFileNameLabel)))
+                .addGap(0, 10, Short.MAX_VALUE))
         );
         stepOneContainerPanelLayout.setVerticalGroup(
             stepOneContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,6 +125,10 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         );
 
         stepThreeContainerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("3. Complete")));
+        stepThreeContainerPanel.setMaximumSize(new java.awt.Dimension(350, 71));
+        stepThreeContainerPanel.setMinimumSize(new java.awt.Dimension(350, 71));
+        stepThreeContainerPanel.setPreferredSize(new java.awt.Dimension(350, 71));
+        stepThreeContainerPanel.setRequestFocusEnabled(false);
 
         doneBtn.setText("Done");
         doneBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -126,24 +137,33 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
             }
         });
 
+        addTimestampCheckBox.setText("Add timestamp to file name");
+
         javax.swing.GroupLayout stepThreeContainerPanelLayout = new javax.swing.GroupLayout(stepThreeContainerPanel);
         stepThreeContainerPanel.setLayout(stepThreeContainerPanelLayout);
         stepThreeContainerPanelLayout.setHorizontalGroup(
             stepThreeContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(stepThreeContainerPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(doneBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(stepThreeContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(doneBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(stepThreeContainerPanelLayout.createSequentialGroup()
+                        .addComponent(addTimestampCheckBox)
+                        .addGap(0, 163, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         stepThreeContainerPanelLayout.setVerticalGroup(
             stepThreeContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(doneBtn)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, stepThreeContainerPanelLayout.createSequentialGroup()
+                .addComponent(addTimestampCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(doneBtn))
         );
 
         stepTwoContainerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("2. Selected verses")));
-        stepTwoContainerPanel.setMaximumSize(new java.awt.Dimension(410, 159));
-        stepTwoContainerPanel.setMinimumSize(new java.awt.Dimension(410, 159));
-        stepTwoContainerPanel.setRequestFocusEnabled(false);
+        stepTwoContainerPanel.setMaximumSize(new java.awt.Dimension(350, 159));
+        stepTwoContainerPanel.setMinimumSize(new java.awt.Dimension(350, 159));
+        stepTwoContainerPanel.setPreferredSize(new java.awt.Dimension(350, 159));
 
         verseContainerPanel.setEnabled(false);
 
@@ -185,7 +205,6 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         stepTwoContainerPanel.setLayout(stepTwoContainerPanelLayout);
         stepTwoContainerPanelLayout.setHorizontalGroup(
             stepTwoContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(verseContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(stepTwoContainerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(selectLabel)
@@ -193,7 +212,8 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
                 .addComponent(selectAllBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearSelectionBtn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(185, Short.MAX_VALUE))
+            .addComponent(verseContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         stepTwoContainerPanelLayout.setVerticalGroup(
             stepTwoContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,13 +230,13 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(stepTwoContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 380, Short.MAX_VALUE)
-                    .addComponent(stepOneContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(stepThreeContainerPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(stepOneContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(stepThreeContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(stepTwoContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,8 +246,8 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(stepTwoContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stepThreeContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(stepThreeContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -236,20 +256,39 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cocSongReaderOpenFileBtnMouseClicked
 
     private void doneBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneBtnMouseClicked
+        String filePathString = PROPERTY_UTIL.getNewPptFolderLocation() + File.separator + selectedFile.getName();
+
+        File newPresentation = new File(filePathString);
+        if (!addTimestampCheckBox.isSelected() && newPresentation.exists() && newPresentation.isFile()) {
+            int result = JOptionPane.showConfirmDialog((Component) null, String.format(FILE_EXISTS_MESSAGE, newPresentation.getParent()),
+                    "PowerPoint presentation already exists!", JOptionPane.OK_CANCEL_OPTION);
+
+            if (result == 0) {
+                createNewPresentation();
+            }
+        } else {
+            createNewPresentation();
+        }
+    }//GEN-LAST:event_doneBtnMouseClicked
+
+    /**
+     * Extracted method which creates a presentation with the selected verses.
+     */
+    private void createNewPresentation() {
         try {
-            pptUtil.getPresentationWithSelectedVerses(selectedFile, verseSelectionMap);
-            JOptionPane.showMessageDialog(this, "Temp ppt file successfully created!");
+            PPT_UTIL.writePresentationWithSelectedVerses(selectedFile, verseSelectionMap, addTimestampCheckBox.isSelected());
+            JOptionPane.showMessageDialog(this, SUCCESSFUL_PPT_CREATION_MESSAGE);
             resetComponents();
         } catch (Exception ex) {
             if (ex instanceof IOException) {
-                JOptionPane.showMessageDialog(this, "Something went wrong while working with the file.");
-                //Something went wrong while working with the file
+                LOGGER.error(CLASS_NAME + ":createNewPresentation: " + FILE_MGT_EXCEPTION_MESSAGE + " - " + ex.getMessage());
+                JOptionPane.showMessageDialog(this, FILE_MGT_EXCEPTION_MESSAGE);
             } else {
-                //An unknown exception was thrown
-                JOptionPane.showMessageDialog(this, "An unknown exception was thrown.");
+                LOGGER.error(CLASS_NAME + ":createNewPresentation: " + UNKNOWN_EXCEPTION_MESSAGE + " - " + ex.getMessage());
+                JOptionPane.showMessageDialog(this, UNKNOWN_EXCEPTION_MESSAGE);
             }
         }
-    }//GEN-LAST:event_doneBtnMouseClicked
+    }
 
     private void selectAllBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectAllBtnMousePressed
         updateCheckBoxes(true);
@@ -259,12 +298,16 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         updateCheckBoxes(false);
     }//GEN-LAST:event_clearSelectionBtnMousePressed
 
+    /**
+     * Utility method that presents a file chooser and works with the user's
+     * selection.
+     */
     private void readSong() {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select a song");
         FileNameExtensionFilter filter = new FileNameExtensionFilter(VALID_FILE_DESCRIPTION, VALID_FILE_EXTENSION);
-
         fileChooser.setFileFilter(filter);
-        fileChooser.setCurrentDirectory(new File(System.getProperty(SONG_CHOOSER_DEFAULT_DIR)));
+        fileChooser.setCurrentDirectory(new File(PROPERTY_UTIL.getPptFolderLocation()));
 
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -277,7 +320,7 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
                     try {
                         //Process
                         selectedFileNameLabel.setText(selectedFile.getName());
-                        int numVerses = pptUtil.determineNumVerses(selectedFile);
+                        int numVerses = PPT_UTIL.determineNumVerses(selectedFile);
 
                         if (numVerses == 0) {
                             JOptionPane.showMessageDialog(this, "0 Verses found, nothing to do.");
@@ -287,11 +330,11 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
                         }
                     } catch (Exception ex) {
                         if (ex instanceof IOException) {
-                            JOptionPane.showMessageDialog(this, "Something went wrong while working with the file.");
-                            //Something went wrong while working with the file
+                            LOGGER.error(CLASS_NAME + ":readSong: " + FILE_MGT_EXCEPTION_MESSAGE + " - " + ex.getMessage());
+                            JOptionPane.showMessageDialog(this, FILE_MGT_EXCEPTION_MESSAGE);
                         } else {
-                            //An unknown exception was thrown
-                            JOptionPane.showMessageDialog(this, "An unknown exception was thrown.");
+                            LOGGER.error(CLASS_NAME + ":readSong: " + UNKNOWN_EXCEPTION_MESSAGE + " - " + ex.getMessage());
+                            JOptionPane.showMessageDialog(this, UNKNOWN_EXCEPTION_MESSAGE);
                         }
                         resetComponents();
                     }
@@ -302,6 +345,12 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Utility method that dynamically adds verse check boxes to a panel based
+     * on the number verses passed in as a parameter.
+     *
+     * @param numVerses the number verses in the song.
+     */
     private void displayVerseSelection(int numVerses) {
         defaultTextLabel.setVisible(false);
         setButtonsEnabled(true);
@@ -358,20 +407,22 @@ public class SongVerseChooserPanel extends javax.swing.JPanel {
         defaultTextLabel.setVisible(true);
         selectedFileNameLabel.setText(NO_FILE_SELECTED);
     }
-    
+
     private void setButtonsEnabled(boolean enabled) {
         selectAllBtn.setEnabled(enabled);
         clearSelectionBtn.setEnabled(enabled);
         doneBtn.setEnabled(enabled);
+        addTimestampCheckBox.setEnabled(enabled);
     }
-    
+
     private void updateCheckBoxes(boolean selected) {
-        for(JCheckBox checkBox : checkBoxes) {
+        for (JCheckBox checkBox : checkBoxes) {
             checkBox.setSelected(selected);
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox addTimestampCheckBox;
     private javax.swing.JButton clearSelectionBtn;
     private javax.swing.JButton cocSongReaderOpenFileBtn;
     private javax.swing.JLabel defaultTextLabel;

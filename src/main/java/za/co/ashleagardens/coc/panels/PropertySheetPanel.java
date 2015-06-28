@@ -1,10 +1,7 @@
 package za.co.ashleagardens.coc.panels;
 
-import java.io.IOException;
-import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import za.co.ashleagardens.coc.components.PropertyTable;
 import org.apache.commons.configuration.ConfigurationException;
@@ -18,14 +15,17 @@ import za.co.ashleagardens.coc.util.PropertyUtil;
  */
 public class PropertySheetPanel extends javax.swing.JPanel {
 
-    private static final PropertyUtil propertyUtil = PropertyUtil.INSTANCE;
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertySheetPanel.class);
+    private static final String CLASS_NAME = PropertySheetPanel.class.getName();
+    private static final PropertyUtil PROPERTY_UTIL = PropertyUtil.INSTANCE;
 
     private final JDialog propertySheetPanelParent;
 
     /**
      * Creates new form PropertySheetPanel
-     * @param propertySheetPanelParent the parent dialog this property sheet gets added to.
+     *
+     * @param propertySheetPanelParent the parent dialog this property sheet
+     * gets added to.
      */
     public PropertySheetPanel(JDialog propertySheetPanelParent) {
         initComponents();
@@ -46,7 +46,7 @@ public class PropertySheetPanel extends javax.swing.JPanel {
 
         propertyTableScrollPane = new javax.swing.JScrollPane();
         try {
-            propertyTable = new PropertyTable(propertyUtil.getApplicationProperties());
+            propertyTable = new PropertyTable(PROPERTY_UTIL.getApplicationProperties());
             okayBtn = new javax.swing.JButton();
             cancelBtn = new javax.swing.JButton();
 
@@ -57,16 +57,18 @@ public class PropertySheetPanel extends javax.swing.JPanel {
         propertyTableScrollPane.setViewportView(propertyTable);
 
         okayBtn.setText("Okay");
+        okayBtn.setToolTipText("Update properties");
         okayBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                okayBtnMousePressed(evt);
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                okayBtnMouseClicked(evt);
             }
         });
 
         cancelBtn.setText("Cancel");
+        cancelBtn.setToolTipText("Close the dialog");
         cancelBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                cancelBtnMousePressed(evt);
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelBtnMouseClicked(evt);
             }
         });
 
@@ -94,19 +96,19 @@ public class PropertySheetPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cancelBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMousePressed
-        this.propertySheetPanelParent.dispose();
-    }//GEN-LAST:event_cancelBtnMousePressed
-
-    private void okayBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okayBtnMousePressed
+    private void okayBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okayBtnMouseClicked
         try {
-            propertyUtil.updatePropertyForApplication(((PropertyTable) propertyTable).getUpdatedPropertyMap());
+            PROPERTY_UTIL.updatePropertyForApplication(((PropertyTable) propertyTable).getUpdatedPropertyMap());
         } catch (ConfigurationException ex) {
-            LOGGER.error(ex.getMessage());
+            LOGGER.error(CLASS_NAME + ":okayBtnMouseClicked: " + ex.getMessage());
             JOptionPane.showMessageDialog(this, "Could not update properties!");
         }
         propertySheetPanelParent.dispose();
-    }//GEN-LAST:event_okayBtnMousePressed
+    }//GEN-LAST:event_okayBtnMouseClicked
+
+    private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
+        this.propertySheetPanelParent.dispose();
+    }//GEN-LAST:event_cancelBtnMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

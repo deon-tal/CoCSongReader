@@ -45,7 +45,7 @@ public final class PptHelperTest {
         verseSelectionMap.put(2, Boolean.FALSE);
 
         //Act
-        pptUtil.getPresentationWithSelectedVerses(pptFile, verseSelectionMap);
+        pptUtil.writePresentationWithSelectedVerses(pptFile, verseSelectionMap, false);
 
         //Assert
     }

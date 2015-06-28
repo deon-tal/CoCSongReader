@@ -19,6 +19,15 @@
         <version.jacoco>0.7.5.201505241946</version.jacoco>
         <version.junit>4.11</version.junit>
         <version.slf4j>1.7.12</version.slf4j>
+        <version.surefire>2.18.1</version.surefire>
+        
+        <!-- Sonar Properties -->
+        <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.jacoco.itReportPath>target/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <sonar.coverage.exclusions>**/*.form</sonar.coverage.exclusions>
+        
+        <jdk.source>1.8</jdk.source>
+        <jdk.target>1.8</jdk.target>
         
         <!-- Build information properties -->
         <timestamp>${maven.build.timestamp}</timestamp>
@@ -74,6 +83,37 @@
         </dependency>
     </dependencies>
     
+    <profiles>
+        <profile>
+            <!-- Only run Unit Tests with Coverage -->
+            <id>Unit-Tests</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${version.surefire}</version>
+                        <configuration>
+                            <source>${jdk.source}</source>
+                            <target>${jdk.target}</target>
+                            <argLine>${argLine}</argLine>
+                        </configuration>
+                        <dependencies>
+                            <!-- SureFire JUnitCore Runner -->
+                            <dependency>
+                                <groupId>org.apache.maven.surefire</groupId>
+                                <artifactId>surefire-junit47</artifactId>
+                                <version>${version.surefire}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    
     <build>
         <resources>
             <resource>
@@ -84,6 +124,8 @@
         
         <plugins>
             <plugin>
+                <!-- The JaCoCo Maven Plugin provides the JaCoCo runtime agent to your tests 
+                and allows basic report creation. -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${version.jacoco}</version>

@@ -6,8 +6,6 @@
 package za.co.ashleagardens.coc.panels;
 
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.LoggerFactory;
 import za.co.ashleagardens.coc.util.PropertyUtil;
@@ -18,12 +16,13 @@ import za.co.ashleagardens.coc.util.PropertyUtil;
  */
 public class AboutPanel extends javax.swing.JPanel {
 
-    private static final PropertyUtil propertyUtil = PropertyUtil.INSTANCE;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AboutPanel.class);
+    private static final String CLASS_NAME = AboutPanel.class.getName();
+    private static final PropertyUtil PROPERTY_UTIL = PropertyUtil.INSTANCE;
+    private static final String VERSION_KEY = "version";
+
     private static String APP_BUILD_VERSION = "Version: ";
     private static String APP_BUILD_VERSION_DATE = "Version Date: ";
-
-    private static final String VERSION_KEY = "version";
 
     /**
      * Creates new form AboutPanel
@@ -32,7 +31,7 @@ public class AboutPanel extends javax.swing.JPanel {
         initComponents();
 
         try {
-            for (Map.Entry<String, String> entry : propertyUtil.getApplicationBuildProperties().entrySet()) {
+            for (Map.Entry<String, String> entry : PROPERTY_UTIL.getApplicationBuildProperties().entrySet()) {
                 if (VERSION_KEY.equals(entry.getKey())) {
                     APP_BUILD_VERSION += entry.getValue();
                 } else {
@@ -40,7 +39,7 @@ public class AboutPanel extends javax.swing.JPanel {
                 }
             }
         } catch (ConfigurationException ex) {
-            LOGGER.error(ex.getMessage());
+            LOGGER.error(CLASS_NAME + ":AboutPanel: " + ex.getMessage());
         }
 
         appVersionLabel.setText(APP_BUILD_VERSION);

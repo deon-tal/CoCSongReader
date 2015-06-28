@@ -2,6 +2,7 @@ package za.co.ashleagardens.coc.components;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
@@ -29,26 +30,60 @@ public class PropertyTable extends JTable {
         this.propertyMap = propertyMap;
         this.tableModel = new PropertyTableModel();
         this.setModel(tableModel);
-        
+
+        initTable();
+    }
+
+    /**
+     * Helper method to init table properties.
+     */
+    private void initTable() {
         this.addMouseListener(new JTableButtonMouseListener(this));
         this.getColumn("").setCellRenderer(new JTableButtonRenderer());
         this.getColumnModel().getColumn(2).setMaxWidth(10);
         this.getColumnModel().getColumn(2).setMinWidth(10);
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         this.setSize(200, propertyMap.size() * 25);
+
         this.setVisible(true);
     }
 
+    /**
+     * A decorator method that delegates the call to the backing table model's
+     * helper method to return the data array as a map.
+     *
+     * @return a map representing the property table.
+     */
     public Map<String, String> getUpdatedPropertyMap() {
         return tableModel.getDataAsPropertyMap();
     }
 
+    private void initDirChooser(final int rowCountForChooser) {
+        JFileChooser dirChooser = new JFileChooser();
+        dirChooser.setCurrentDirectory(new java.io.File((String) tableModel.getValueAt(rowCountForChooser, 1)));
+        dirChooser.setDialogTitle("Select a folder");
+        dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        dirChooser.setAcceptAllFileFilterUsed(false);
+
+        int result = dirChooser.showOpenDialog(PropertyTable.this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (dirChooser.getSelectedFile() != null) {
+                setValueAt(dirChooser.getSelectedFile().getAbsolutePath(), rowCountForChooser, 1);
+            }
+        }
+    }
+
+    /**
+     * Backing model for the <tt>PropertyTable</tt>.
+     */
     private class PropertyTableModel extends AbstractTableModel {
 
         private final String[] columnNames = {"Property Name", "Property Value", ""};
         private Object[][] data;
 
         public PropertyTableModel() {
+            data = new Object[propertyMap.size()][3];
             setTableDataFromPropertiesMap();
         }
 
@@ -89,22 +124,22 @@ public class PropertyTable extends JTable {
         }
 
         private void setTableDataFromPropertiesMap() {
-            data = new Object[propertyMap.size()][3];
-
             if (!propertyMap.isEmpty()) {
                 int rowCount = 0;
                 for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
                     data[rowCount][0] = entry.getKey();
                     data[rowCount][1] = entry.getValue();
-                    JButton buttonTest = new JButton("...");
-                    buttonTest.addActionListener(new ActionListener() {
+                    JButton invokeDirChooserBtn = new JButton("...");
+
+                    final int rowCountForChooser = rowCount;
+                    invokeDirChooserBtn.addActionListener(new ActionListener() {
 
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            JOptionPane.showMessageDialog(PropertyTable.this, "Yay");
+                            initDirChooser(rowCountForChooser);
                         }
                     });
-                    data[rowCount++][2] = buttonTest;
+                    data[rowCount++][2] = invokeDirChooserBtn;
                 }
             } else {
                 //TODO: Re-evaluate whether this is necessary
@@ -126,6 +161,9 @@ public class PropertyTable extends JTable {
         }
     }
 
+    /**
+     * Private helper class to render buttons in the cell of the table.
+     */
     private class JTableButtonRenderer implements TableCellRenderer {
 
         @Override
@@ -142,6 +180,9 @@ public class PropertyTable extends JTable {
         }
     }
 
+    /**
+     * Private helper class used for mouse events on the table.
+     */
     private class JTableButtonMouseListener extends MouseAdapter {
 
         private final JTable table;
@@ -151,15 +192,21 @@ public class PropertyTable extends JTable {
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
-            int column = table.getColumnModel().getColumnIndexAtX(e.getX());
-            int row = e.getY() / table.getRowHeight();
+        public void mousePressed(MouseEvent e) {
+            Point clickPoint = e.getPoint();
 
-            if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
+            int row = table.rowAtPoint(clickPoint);
+            int column = table.columnAtPoint(clickPoint);
+
+            if (column == 2 && row >= 0) {
                 Object value = table.getValueAt(row, column);
                 if (value instanceof JButton) {
                     ((JButton) value).doClick();
                 }
+            }
+
+            if (tableModel.isCellEditable(row, column)) {
+                table.editCellAt(row, column);
             }
         }
     }

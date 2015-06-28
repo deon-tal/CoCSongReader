@@ -69,7 +69,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PropertyTable(propertyUtil.getApplicationProperties())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PropertyTable(PROPERTY_UTIL.getApplicationProperties())"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="try {"/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="} catch (ConfigurationException ex) {&#xa; LOGGER.error(ex.getMessage());&#xa;}"/>
           </AuxValues>
@@ -79,17 +79,19 @@
     <Component class="javax.swing.JButton" name="okayBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="Okay"/>
+        <Property name="toolTipText" type="java.lang.String" value="Update properties"/>
       </Properties>
       <Events>
-        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="okayBtnMousePressed"/>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="okayBtnMouseClicked"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="cancelBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancel"/>
+        <Property name="toolTipText" type="java.lang.String" value="Close the dialog"/>
       </Properties>
       <Events>
-        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cancelBtnMousePressed"/>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cancelBtnMouseClicked"/>
       </Events>
     </Component>
   </SubComponents>
