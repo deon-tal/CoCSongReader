@@ -20,6 +20,8 @@
         <version.junit>4.11</version.junit>
         <version.slf4j>1.7.12</version.slf4j>
         <version.surefire>2.18.1</version.surefire>
+        <version.swingx>1.6.1</version.swingx>
+        <version.swingx.core>1.6.2-2</version.swingx.core>
         
         <!-- Sonar Properties -->
         <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
@@ -35,6 +37,19 @@
     </properties>
     
     <dependencies>
+        <!-- SwingX -->
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swingx</artifactId>
+            <version>${version.swingx}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swingx-core</artifactId>
+            <version>${version.swingx.core}</version>
+        </dependency>
+        
         <!-- Apache POI -->
         <dependency>
             <groupId>org.apache.poi</groupId>

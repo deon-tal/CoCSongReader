@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.UIManager;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -21,7 +22,7 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author Deon
  */
-public class PropertyTable extends JTable {
+public class PropertyTable extends JXTable {
 
     private final Map<String, String> propertyMap;
     private final PropertyTableModel tableModel;
@@ -42,8 +43,14 @@ public class PropertyTable extends JTable {
         this.getColumn("").setCellRenderer(new JTableButtonRenderer());
         this.getColumnModel().getColumn(2).setMaxWidth(10);
         this.getColumnModel().getColumn(2).setMinWidth(10);
-        this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
         this.setSize(200, propertyMap.size() * 25);
+
+        Color color = UIManager.getColor("Table.gridColor");
+        MatteBorder border = new MatteBorder(1, 1, 0, 1, color);
+
+        this.setBorder(BorderFactory.createLineBorder(color, 1));
+        this.getTableHeader().setBorder(border);
 
         this.setVisible(true);
     }
@@ -169,6 +176,8 @@ public class PropertyTable extends JTable {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             JButton button = (JButton) value;
+
+            button.setToolTipText("Select a directory");
             if (isSelected) {
                 button.setForeground(table.getSelectionForeground());
                 button.setBackground(table.getSelectionBackground());
